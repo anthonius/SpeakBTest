@@ -8,11 +8,13 @@
 import SwiftUI
 
 struct SignupView: View {
+    @State private var animate = false
+    
     var barData: [BarModel] = [
-        BarModel(height: 66, label: "現在"),
-        BarModel(height: 100, label: "3ヶ月"),
-        BarModel(height: 220, label: "1年"),
-        BarModel(height: 300, label: "2年")
+        BarModel(initialHeight: 0, finalHeight: 66, label: "現在"),
+        BarModel(initialHeight: 0, finalHeight: 100, label: "3ヶ月"),
+        BarModel(initialHeight: 0, finalHeight: 220, label: "1年"),
+        BarModel(initialHeight: 0, finalHeight: 300, label: "2年")
     ]
     
     var body: some View {
@@ -53,7 +55,9 @@ struct SignupView: View {
                         ForEach(0..<barData.count, id: \.self) { index in
                             VStack {
                                 RoundedRectangle(cornerRadius: 4)
-                                    .frame(width: 48, height: barData[index].height, alignment: .bottom)
+                                    .fill(LinearGradient(gradient: Gradient(colors: [Color.gradientBottomBlue, Color.gradientTopBlue]), startPoint: .bottom, endPoint: .top))
+                                    .frame(width: 48, height: animate ? barData[index].finalHeight : barData[index].initialHeight, alignment: .bottom)
+                                    .animation(.easeInOut(duration: 1.0), value: animate)
                                 Text(barData[index].label)
                                     .font(.system(size: 12, weight: .bold))
                             }
@@ -61,6 +65,9 @@ struct SignupView: View {
                     }
                     .frame(height: 300, alignment: .bottom)
                     .padding()
+                    .onAppear() {
+                        animate = true
+                    }
                     
                     Text("スピークバディで")
                     Text("レベルアップ")

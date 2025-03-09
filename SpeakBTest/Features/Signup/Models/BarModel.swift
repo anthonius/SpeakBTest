@@ -9,6 +9,7 @@ import Foundation
 
 struct BarModel: Identifiable {
     let id = UUID()
-    let height: CGFloat
+    var initialHeight: CGFloat // for animation purpose
+    let finalHeight: CGFloat
     let label: String
 }
