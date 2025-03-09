@@ -7,10 +7,21 @@
 
 import SwiftUI
 
+/// Providing a configuration page to showcase several behaviors adjustments
 struct ConfigView: View {
-    @State private var isPresentView: Bool = true
+    @StateObject private var configVm = ConfigViewModel()
+    
     @State private var isModalPresented = false
     @State private var path: [String] = [] // Keeps track of the navigation path
+    
+    private var seeBtnText: some View {
+        Text("See the sign up screen")
+            .font(.system(size: 16, weight: .semibold))
+            .foregroundColor(.white)
+            .frame(width: 350, height: 50)
+            .background(Color.primaryBlue)
+            .clipShape(RoundedRectangle(cornerRadius: 25))
+    }
     
     var body: some View {
         NavigationStack(path: $path) {
@@ -19,19 +30,26 @@ struct ConfigView: View {
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                 
-                Toggle("Is it presenting a fullscreen?", isOn: $isPresentView)
+                Text("Hi! Let's configure the sign up screen.")
+                    .font(.title3)
                 
-                if isPresentView {
+                Divider()
+                
+                List {
+                    ForEach($configVm.configs) { $config in
+                        ConfigRow(item: $config) { newType in
+                            configVm.updateValues(id: config.id, newType: newType)
+                        }
+                    }
+                }
+                .listStyle(.plain)
+                
+                if configVm.isPresentView {
                     /// Modal presentation
                     Button(action: {
                         isModalPresented.toggle()
                     }) {
-                        Text("See the sign up screen")
-                            .font(.system(size: 16, weight: .semibold))
-                            .foregroundColor(.white)
-                            .frame(width: 350, height: 50)
-                            .background(Color.primaryBlue)
-                            .clipShape(RoundedRectangle(cornerRadius: 25))
+                        seeBtnText
                     }
                     .fullScreenCover(isPresented: $isModalPresented) {
                         SignupView() {
@@ -41,12 +59,7 @@ struct ConfigView: View {
                 } else {
                     /// Push navigation
                     NavigationLink(value: "signup") {
-                        Text("See the sign up screen")
-                            .font(.system(size: 16, weight: .semibold))
-                            .foregroundColor(.white)
-                            .frame(width: 350, height: 50)
-                            .background(Color.primaryBlue)
-                            .clipShape(RoundedRectangle(cornerRadius: 25))
+                        seeBtnText
                     }
                     .navigationDestination(for: String.self) { value in
                         if value == "signup" {
