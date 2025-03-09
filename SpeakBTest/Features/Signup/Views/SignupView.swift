@@ -10,14 +10,16 @@ import SwiftUI
 struct SignupView: View {
     let originalRobotWidth: CGFloat = 187 // base value based on Figma design
     let originalRobotHeight: CGFloat = 160
-    
+    let isCloseBtnScrollable: Bool
+    let animationDelay: Double
+    let titleFontSize: Int
+    let barWidthPreference: String
     var barData: [BarModel] = [
         BarModel(initialHeight: 0, finalHeight: 66, label: "現在"),
         BarModel(initialHeight: 0, finalHeight: 100, label: "3ヶ月"),
         BarModel(initialHeight: 0, finalHeight: 220, label: "1年"),
         BarModel(initialHeight: 0, finalHeight: 300, label: "2年")
     ]
-    
     var onDismiss: () -> Void
     
     private var linearBg: some View {
@@ -51,20 +53,22 @@ struct SignupView: View {
                 linearBg
                 
                 ScrollView {
-                    VStack {
+                    if isCloseBtnScrollable {
                         CloseBtnView(geometry: geometry) {
                             onDismiss()
                         }
                         .padding(.trailing, 20)
-                        
+                    }
+                    
+                    VStack {
                         Text("Hello")
-                            .font(.system(size: 36, weight: .bold))
-                            .padding(.top, 12)
+                            .font(.system(size: CGFloat(titleFontSize), weight: .bold))
+                            .padding(.top, isCloseBtnScrollable ? 12 : 85)
                         Text("SpeakBUDDY")
-                            .font(.system(size: 36, weight: .bold))
+                            .font(.system(size: CGFloat(titleFontSize), weight: .bold))
                         
                         ZStack(alignment: .top) {
-                            BarGraphView(geometry: geometry, barData: barData)
+                            BarGraphView(geometry: geometry, barData: barData, barWidthPreference: barWidthPreference, animationDelay: animationDelay)
                             
                             Image("robot")
                                 .resizable()
@@ -83,6 +87,12 @@ struct SignupView: View {
                         
                         signupBtn
                             .padding(.top, 16)
+                    }
+                    .frame(maxWidth: .infinity)
+                }
+                if !isCloseBtnScrollable {
+                    CloseBtnView(geometry: geometry) {
+                        onDismiss()
                     }
                 }
             }
@@ -117,6 +127,9 @@ private struct BarGraphView: View {
     @State private var animate = false
     let geometry: GeometryProxy
     let barData: [BarModel]
+    let barWidthPreference: String
+    let animationDelay: CGFloat
+    let staticBarWidth: CGFloat = 48
     var proportionalBarWidth: CGFloat {
         return (geometry.size.width - 150)/CGFloat(barData.count)
     }
@@ -127,10 +140,11 @@ private struct BarGraphView: View {
                 VStack {
                     RoundedRectangle(cornerRadius: 4)
                         .fill(LinearGradient(gradient: Gradient(colors: [Color.gradientBottomBlue, Color.gradientTopBlue]), startPoint: .bottom, endPoint: .top))
-                        .frame(width: max(0, proportionalBarWidth), height: animate ? max(0, barData[index].finalHeight) : max(0, barData[index].initialHeight), alignment: .bottom)
-                        .animation(.easeInOut(duration: 1.0).delay(Double(index) * 0.2), value: animate)
+                        .frame(width: max(0,(barWidthPreference == Constants.Configuration.barProportionalWidth ? proportionalBarWidth : staticBarWidth)), height: animate ? max(0, barData[index].finalHeight) : max(0, barData[index].initialHeight), alignment: .bottom)
+                        .animation(.easeInOut(duration: 1.0).delay(Double(index) * animationDelay), value: animate)
                     Text(barData[index].label)
-                        .font(.system(size: ScalingHelper.scale(12, screenWidth: geometry.size.width), weight: .bold))
+//                        .font(.custom("Hiragino-Sans", size: 12)) // sorry I can't find Hiragino Sans bold font
+                        .font(.system(size: 12, weight: .bold))
                 }
             }
         }
@@ -143,5 +157,9 @@ private struct BarGraphView: View {
 }
 
 #Preview {
-    SignupView(onDismiss: {})
+    SignupView(isCloseBtnScrollable: false,
+               animationDelay: 1.0,
+               titleFontSize: 36,
+               barWidthPreference: Constants.Configuration.barProportionalWidth,
+               onDismiss: {})
 }

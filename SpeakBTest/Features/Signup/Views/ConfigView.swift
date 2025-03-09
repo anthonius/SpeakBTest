@@ -52,7 +52,10 @@ struct ConfigView: View {
                         seeBtnText
                     }
                     .fullScreenCover(isPresented: $isModalPresented) {
-                        SignupView() {
+                        SignupView(isCloseBtnScrollable: configVm.isCloseBtnScrollable,
+                                   animationDelay: configVm.animationDelay,
+                                   titleFontSize: configVm.titleFontSize,
+                                   barWidthPreference: configVm.barWidthPreference) {
                             isModalPresented = false
                         }
                     }
@@ -63,7 +66,10 @@ struct ConfigView: View {
                     }
                     .navigationDestination(for: String.self) { value in
                         if value == "signup" {
-                            SignupView() {
+                            SignupView(isCloseBtnScrollable: configVm.isCloseBtnScrollable,
+                                       animationDelay: configVm.animationDelay,
+                                       titleFontSize: configVm.titleFontSize,
+                                       barWidthPreference: configVm.barWidthPreference) {
                                 path.removeLast()  // This pops the view from the navigation stack
                             }
                         }
