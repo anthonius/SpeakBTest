@@ -11,7 +11,6 @@ struct SignupView: View {
     let originalRobotWidth: CGFloat = 187 // base value based on Figma design
     let originalRobotHeight: CGFloat = 160
     
-    
     var barData: [BarModel] = [
         BarModel(initialHeight: 0, finalHeight: 66, label: "現在"),
         BarModel(initialHeight: 0, finalHeight: 100, label: "3ヶ月"),
@@ -37,9 +36,12 @@ struct SignupView: View {
                             .padding(.trailing, 20)
                         
                         Text("Hello")
-                            .font(.system(size: ScalingHelper.scale(36, screenWidth: geometry.size.width), weight: .bold))
+                            .font(.system(size: 36, weight: .bold, design: .default))
+                            .scaledToFit()
                         Text("SpeakBUDDY")
-                            .font(.system(size: ScalingHelper.scale(36, screenWidth: geometry.size.width), weight: .bold))
+                            .font(.system(size: 36, weight: .bold))
+                            .scaledToFit()
+                            .minimumScaleFactor(0.8)
                         
                         ZStack(alignment: .top) {
                             BarGraphView(geometry: geometry, barData: barData)
@@ -53,21 +55,25 @@ struct SignupView: View {
                         .padding(.top, 60)
                         
                         Text("スピークバディで")
-                            .font(.system(size: ScalingHelper.scale(20, screenWidth: geometry.size.width), weight: .semibold)) // sorry I can't find Hiragino Sans semibold font
+                            .font(.system(size: 20, weight: .semibold)) // sorry I can't find Hiragino Sans semibold font
+                            .scaledToFit()
+                            .minimumScaleFactor(0.8)
                             .padding(.top, 12)
                         
-                        LinearGradientText("レベルアップ", fontSize: ScalingHelper.scale(30, screenWidth: geometry.size.width))
+                        LinearGradientText("レベルアップ")
+                            .scaledToFit()
+                            .minimumScaleFactor(0.8)
                             .padding(.top, 1)
                         
                         Button(action: {
                             print("Button tapped!")
                         }) {
                             Text("プランに登録する")
-                                .font(.system(size: ScalingHelper.scale(16, screenWidth: geometry.size.width)))
+                                .font(.system(size: 16))
                                 .foregroundColor(.white)
-                                .frame(width: min(500, ScalingHelper.scale(350, screenWidth: geometry.size.width)), height: min(80, ScalingHelper.scale(50, screenWidth: geometry.size.width)))
-                                .background(Color.blue)
-                                .clipShape(RoundedRectangle(cornerRadius: min(80, ScalingHelper.scale(50, screenWidth: geometry.size.width))/2))
+                                .frame(width: 350, height: 50)
+                                .background(Color.primaryBlue)
+                                .clipShape(RoundedRectangle(cornerRadius: 25))
                         }
                         .padding(.top, 16)
                     }
@@ -88,9 +94,9 @@ private struct CloseBtnView: View {
                 print("Button tapped!")
             }) {
                 Image(systemName: "xmark")
-                    .font(.system(size: ScalingHelper.scale(20, screenWidth: geometry.size.width), weight: .bold))
+                    .font(.system(size: 20, weight: .bold))
                     .foregroundColor(.gray)
-                    .padding(ScalingHelper.scale(12, screenWidth: geometry.size.width))
+                    .padding(12)
                     .background(.white)
                     .clipShape(Circle())
                     .shadow(color: .black.opacity(0.2), radius: 5, x: 0, y: 5)
