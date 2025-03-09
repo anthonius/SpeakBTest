@@ -57,7 +57,7 @@ struct SignupView: View {
                                 RoundedRectangle(cornerRadius: 4)
                                     .fill(LinearGradient(gradient: Gradient(colors: [Color.gradientBottomBlue, Color.gradientTopBlue]), startPoint: .bottom, endPoint: .top))
                                     .frame(width: 48, height: animate ? barData[index].finalHeight : barData[index].initialHeight, alignment: .bottom)
-                                    .animation(.easeInOut(duration: 1.0), value: animate)
+                                    .animation(.easeInOut(duration: 1.0).delay(Double(index) * 0.2), value: animate)
                                 Text(barData[index].label)
                                     .font(.system(size: 12, weight: .bold))
                             }
