@@ -70,7 +70,8 @@ struct SignupView: View {
                     }
                     
                     Text("スピークバディで")
-                    Text("レベルアップ")
+                    LinearGradientText("レベルアップ")
+                        .padding(.top, 1)
                     
                     Button(action: {
                         print("Button tapped!")
@@ -81,6 +82,7 @@ struct SignupView: View {
                             .background(Color.blue)
                             .clipShape(RoundedRectangle(cornerRadius: 25))
                     }
+                    .padding(.top, 16)
                 }
             }
         }
