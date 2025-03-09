@@ -8,6 +8,13 @@
 import SwiftUI
 
 struct SignupView: View {
+    var barData: [BarModel] = [
+        BarModel(height: 66, label: "現在"),
+        BarModel(height: 100, label: "3ヶ月"),
+        BarModel(height: 220, label: "1年"),
+        BarModel(height: 300, label: "2年")
+    ]
+    
     var body: some View {
         ZStack {
             LinearGradient(gradient: Gradient(colors: [Color.white, Color.purpleBg]),
@@ -41,6 +48,19 @@ struct SignupView: View {
                         .resizable()
                         .scaledToFit()
                         .frame(width: 187, height: 160)
+                    
+                    HStack(alignment: .bottom, spacing: 16) {
+                        ForEach(0..<barData.count, id: \.self) { index in
+                            VStack {
+                                RoundedRectangle(cornerRadius: 4)
+                                    .frame(width: 48, height: barData[index].height, alignment: .bottom)
+                                Text(barData[index].label)
+                                    .font(.system(size: 12, weight: .bold))
+                            }
+                        }
+                    }
+                    .frame(height: 300, alignment: .bottom)
+                    .padding()
                     
                     Text("スピークバディで")
                     Text("レベルアップ")
