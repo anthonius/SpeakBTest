@@ -40,33 +40,24 @@ struct SignupView: View {
             
             ScrollView {
                 VStack {
-                    HStack {
-                        Spacer()
-                        Button(action: {
-                            print("Button tapped!")
-                        }) {
-                            Image(systemName: "xmark")
-                                .font(.system(size: 20, weight: .bold))
-                                .foregroundColor(.gray)
-                                .padding(12)
-                                .background(.white)
-                                .clipShape(Circle())
-                                .shadow(color: .black.opacity(0.2), radius: 5, x: 0, y: 5)
-                        }
-                    }
-                    .padding(.trailing, 20)
+                    CloseBtnView()
+                        .padding(.trailing, 20)
                     
                     Text("Hello")
                         .font(.system(size: 36, weight: .bold))
                     Text("SpeakBUDDY")
                         .font(.system(size: 36, weight: .bold))
                     
-                    Image("robot")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 187, height: 160)
-                    
-                    BarGraphView(barData: barData)
+                    ZStack(alignment: .top) {
+                        BarGraphView(barData: barData)
+
+                        Image("robot")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 187, height: 160)
+                            .offset(x: -100, y: -50)
+                    }
+                    .padding(.top, 60)
                     
                     Text("スピークバディで")
                     
@@ -76,6 +67,26 @@ struct SignupView: View {
                     signupBtn
                         .padding(.top, 16)
                 }
+            }
+        }
+    }
+}
+
+/// Creating a separate subview to increase readability
+private struct CloseBtnView: View {
+    var body: some View {
+        HStack {
+            Spacer()
+            Button(action: {
+                print("Button tapped!")
+            }) {
+                Image(systemName: "xmark")
+                    .font(.system(size: 20, weight: .bold))
+                    .foregroundColor(.gray)
+                    .padding(12)
+                    .background(.white)
+                    .clipShape(Circle())
+                    .shadow(color: .black.opacity(0.2), radius: 5, x: 0, y: 5)
             }
         }
     }
